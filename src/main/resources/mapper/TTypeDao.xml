@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nnxy.blog.dao.TTypeDao">
+
+    <resultMap type="com.nnxy.blog.entity.TType" id="TTypeMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TTypeMap">
+        select
+          id, name
+        from blog.t_type
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TTypeMap">
+        select
+          id, name
+        from blog.t_type
+        limit #{offset}, #{limit}
+    </select>
+
+    <resultMap id="type" type="com.nnxy.blog.entity.TType">
+        <id property="id" column="tid"/>
+        <result property="name" column="name"/>
+        <collection property="blogs" ofType="com.nnxy.blog.entity.TBlog">
+            <id property="id" column="bid"/>
+            <result property="title" column="title"/>
+            <result property="typeId" column="type_id"/>
+        </collection>
+    </resultMap>
+
+    <!--查询分类-->
+    <select id="getAllTypeAndBlog" resultMap="type">
+    select t.id tid, t.name, b.id bid, b.title,b.type_id
+    from blog.t_type t,blog.t_blog b
+    where t.id = b.type_id
+</select>
+
+    <!--查询所有分类-->
+    <select id="getAllType" resultMap="TTypeMap">
+        select * from blog.t_type
+    </select>
+
+    <!--根据分类名称来查询-->
+    <select id="getTypeByName" resultMap="TTypeMap">
+        select * from blog.t_type where name = #{name}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TTypeMap">
+        select
+        id, name
+        from blog.t_type
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into blog.t_type(name)
+        values (#{name})
+    </insert>
+    <!--新增保存分类-->
+    <insert id="saveType" keyColumn="id" useGeneratedKeys="true" keyProperty="id" parameterType="com.nnxy.blog.entity.TType">
+        insert into blog.t_type values (#{id},#{name});
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update blog.t_type
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--编辑修改分类-->
+    <update id="updateType" parameterType="com.nnxy.blog.entity.TType">
+        update blog.t_type set name = #{name} where id = #{id}
+    </update>
+
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from blog.t_type where id = #{id}
+    </delete>
+
+</mapper>

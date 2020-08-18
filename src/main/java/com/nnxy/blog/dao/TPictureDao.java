@@ -1,0 +1,75 @@
+package com.nnxy.blog.dao;
+
+import com.nnxy.blog.entity.TPicture;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+/**
+ * (TPicture)表数据库访问层
+ *
+ * @author makejava
+ * @since 2020-08-15 11:49:02
+ */
+@Mapper
+public interface TPictureDao {
+
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param id 主键
+     * @return 实例对象
+     */
+    TPicture queryById(Long id);
+
+    /**
+     * 查询指定行数据
+     *
+     * @param offset 查询起始位置
+     * @param limit  查询条数
+     * @return 对象列表
+     */
+    List<TPicture> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+
+
+    /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param tPicture 实例对象
+     * @return 对象列表
+     */
+    List<TPicture> queryAll(TPicture tPicture);
+
+    /**
+     * 新增数据
+     *
+     * @param tPicture 实例对象
+     * @return 影响行数
+     */
+    int insert(TPicture tPicture);
+
+    /**
+     * 修改数据
+     *
+     * @param tPicture 实例对象
+     * @return 影响行数
+     */
+    int update(TPicture tPicture);
+
+    /**
+     * 通过主键删除数据
+     *
+     * @param id 主键
+     * @return 影响行数
+     */
+    int deleteById(Long id);
+
+    List<TPicture> getAllPictures();
+
+    int savePictures(TPicture tPicture);
+
+    int updatePicture(TPicture tPicture);
+
+    List<TPicture> listPicture();
+}

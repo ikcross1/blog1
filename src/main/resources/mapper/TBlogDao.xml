@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nnxy.blog.dao.TBlogDao">
+
+    <resultMap type="com.nnxy.blog.entity.TBlog" id="TBlogMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="appreciation" column="appreciation" jdbcType="OTHER"/>
+        <result property="commentabled" column="commentabled" jdbcType="OTHER"/>
+        <result property="content" column="content" jdbcType="OTHER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="firstPicture" column="first_picture" jdbcType="VARCHAR"/>
+        <result property="flag" column="flag" jdbcType="VARCHAR"/>
+        <result property="published" column="published" jdbcType="OTHER"/>
+        <result property="recommend" column="recommend" jdbcType="OTHER"/>
+        <result property="shareStatement" column="share_statement" jdbcType="OTHER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="views" column="views" jdbcType="INTEGER"/>
+        <result property="typeId" column="type_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="commentCount" column="comment_count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询首页最新博客列表信息-->
+    <resultMap id="firstPageBlog" type="com.nnxy.blog.entity.FirstPageBlog">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="views" column="views"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="description" column="description"/>
+        <result property="typeName" column="name"/>
+        <result property="nickname" column="nickname"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
+    <!--根据TypeId查询博客列表，显示在分类页面-->
+    <select id="getByTypeId" resultMap="firstPageBlog">
+    select b.id,b.title,b.first_picture, b.views, b.comment_count, b.update_time, b.description,t.name ,u.nickname, u.avatar
+    from blog.t_blog b, blog.t_type t,blog.t_user u
+    where b.type_id = t.id and u.id = b.user_id and b.type_id = #{typeId} order by b.update_time desc
+    </select>
+
+
+    <select id="getAllFirstPageBlog" resultMap="firstPageBlog">
+    select b.id,b.title,b.first_picture, b.views, b.comment_count,b.create_time,b.update_time,b.description,
+    t.name ,
+    u.nickname, u.avatar
+    from blog.t_blog b, blog.t_type t,blog.t_user u
+    where b.type_id = t.id and  u.id = b.user_id order by b.create_time desc
+    </select>
+
+    <!--统计博客信息-->
+    <select id="getBlogTotal" resultType="Integer">
+    select count(*) from blog.t_blog
+    </select>
+    <select id="getBlogViewTotal" resultType="Integer">
+    select coalesce (sum(views),0) from blog.t_blog
+    </select>
+    <select id="getBlogCommentTotal" resultType="Integer">
+    select count(*) from blog.t_comment
+    </select>
+    <select id="getBlogMessageTotal" resultType="Integer">
+    select count(*) from blog.t_message
+    </select>
+
+    <!--查询文章管理列表多对一配置-->
+    <resultMap id="blog" type="com.nnxy.blog.entity.BlogQuery">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="recommend" column="recommend"/>
+        <result property="published" column="published"/>
+        <result property="typeId" column="type_id"/>
+        <association property="type" javaType="com.nnxy.blog.entity.TType">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </association>
+    </resultMap>
+
+    <!--编辑修改文章-->
+    <update id="updateBlog" parameterType="com.nnxy.blog.entity.ShowBlog">
+    update blog.t_blog set published = #{published},flag = #{flag} ,
+    title = #{title}, content = #{content}, type_id = #{typeId},
+    first_picture = #{firstPicture} , description = #{description} , recommend = #{recommend} ,
+    share_statement = #{shareStatement}, appreciation = #{appreciation},
+    commentabled = #{commentabled} ,update_time = #{updateTime} where id = #{id};
+    </update>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TBlogMap">
+        select
+          id, appreciation, commentabled, content, create_time, description, first_picture, flag, published, recommend, share_statement, title, update_time, views, type_id, user_id, comment_count
+        from blog.t_blog
+        where id = #{id}
+    </select>
+    <!--查询编辑修改的文章-->
+    <select id="getBlogById" resultType="com.nnxy.blog.entity.ShowBlog">
+    select b.id,b.flag,b.title,b.content,b.type_id,
+    b.first_picture,b.description,b.recommend,b.published,b.share_statement,
+    b.appreciation,b.commentabled from blog.t_blog b  where  b.id = #{id};
+    </select>
+
+    <!--查询文章管理列表-->
+    <select id="getAllBlog" resultMap="blog">
+    select b.id,b.title,b.update_time,b.recommend,b.published,b.type_id,t.id,t.name
+    from blog.t_blog b left outer join
+    blog.t_type t on b.type_id = t.id order by b.update_time desc
+    </select>
+
+    <resultMap id="detailedBlog" type="com.nnxy.blog.entity.DetailedBlog">
+        <id property="id" column="bid"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="flag" column="flag"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="typeName" column="name"/>
+        <result property="views" column="views"/>
+        <result property="commentCount" column="comment_count"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="commentabled" column="commentabled"/>
+        <result property="shareStatement" column="share_statement"/>
+        <result property="appreciation" column="appreciation"/>
+        <result property="nickname" column="nickname"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
+    <!--博客详情查询-->
+    <select id="getDetailedBlog" resultMap="detailedBlog">
+    select b.id bid,b.first_picture,b.flag,b.title,b.content,b.views,b.comment_count,b.update_time,b.commentabled,b.share_statement,b.appreciation, u.nickname,u.avatar,t.name
+    from blog.t_blog b,blog.t_user u, blog.t_type t
+    where b.user_id = u.id and b.type_id = t.id and b.id = #{id}
+    </select>
+
+
+
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TBlogMap">
+        select
+          id, appreciation, commentabled, content, create_time, description, first_picture, flag, published, recommend, share_statement, title, update_time, views, type_id, user_id, comment_count
+        from blog.t_blog
+        limit #{offset}, #{limit}
+    </select>
+
+
+
+    <!--查询推荐文章-->
+    <select id="getRecommendedBlog" resultType="com.nnxy.blog.entity.RecommendBlog">
+    select * from blog.t_blog where t_blog.recommend = true order by t_blog.create_time desc limit 4;
+    </select>
+
+    <!--文章访问自增-->
+    <update id="updateViews" parameterType="com.nnxy.blog.entity.TBlog">
+    update blog.t_blog b set b.views = b.views+1 where b.id = #{id}
+    </update>
+
+
+    <!--查询出文章评论数量并更新-->
+    <update id="getCommentCountById" parameterType="com.nnxy.blog.entity.TBlog">
+    update blog.t_blog b set b.comment_count = (
+    select count(*) from blog.t_comment c where c.blog_id = #{id} and b.id = #{id}
+    ) WHERE b.id = #{id}
+    </update>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TBlogMap">
+        select
+        id, appreciation, commentabled, content, create_time, description, first_picture, flag, published, recommend,
+        share_statement, title, update_time, views, type_id, user_id, comment_count
+        from blog.t_blog
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="appreciation != null">
+                and appreciation = #{appreciation}
+            </if>
+            <if test="commentabled != null">
+                and commentabled = #{commentabled}
+            </if>
+            <if test="content != null">
+                and content = #{content}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="description != null and description != ''">
+                and description = #{description}
+            </if>
+            <if test="firstPicture != null and firstPicture != ''">
+                and first_picture = #{firstPicture}
+            </if>
+            <if test="flag != null and flag != ''">
+                and flag = #{flag}
+            </if>
+            <if test="published != null">
+                and published = #{published}
+            </if>
+            <if test="recommend != null">
+                and recommend = #{recommend}
+            </if>
+            <if test="shareStatement != null">
+                and share_statement = #{shareStatement}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="views != null">
+                and views = #{views}
+            </if>
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="commentCount != null">
+                and comment_count = #{commentCount}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into blog.t_blog(appreciation, commentabled, content, create_time, description, first_picture, flag, published, recommend, share_statement, title, update_time, views, type_id, user_id, comment_count)
+        values (#{appreciation}, #{commentabled}, #{content}, #{createTime}, #{description}, #{firstPicture}, #{flag}, #{published}, #{recommend}, #{shareStatement}, #{title}, #{updateTime}, #{views}, #{typeId}, #{userId}, #{commentCount})
+    </insert>
+
+    <insert id="saveBlog" parameterType="com.nnxy.blog.entity.TBlog">
+    insert into t_blog (id,title, content, first_picture, flag,
+    views, comment_count, appreciation, share_statement, commentabled, published,
+    recommend, create_time, update_time, type_id, user_id, description)
+    values (#{id},#{title},#{content},#{firstPicture},#{flag},#{views},#{commentCount},#{appreciation},
+    #{shareStatement},#{commentabled},#{published},#{recommend},#{createTime},
+    #{updateTime},#{typeId},#{userId},#{description});
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update blog.t_blog
+        <set>
+            <if test="appreciation != null">
+                appreciation = #{appreciation},
+            </if>
+            <if test="commentabled != null">
+                commentabled = #{commentabled},
+            </if>
+            <if test="content != null">
+                content = #{content},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="firstPicture != null and firstPicture != ''">
+                first_picture = #{firstPicture},
+            </if>
+            <if test="flag != null and flag != ''">
+                flag = #{flag},
+            </if>
+            <if test="published != null">
+                published = #{published},
+            </if>
+            <if test="recommend != null">
+                recommend = #{recommend},
+            </if>
+            <if test="shareStatement != null">
+                share_statement = #{shareStatement},
+            </if>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="views != null">
+                views = #{views},
+            </if>
+            <if test="typeId != null">
+                type_id = #{typeId},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="commentCount != null">
+                comment_count = #{commentCount},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from blog.t_blog where id = #{id}
+    </delete>
+
+</mapper>

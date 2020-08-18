@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nnxy.blog.dao.TPictureDao">
+
+    <resultMap type="com.nnxy.blog.entity.TPicture" id="TPictureMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="pictureaddress" column="pictureaddress" jdbcType="VARCHAR"/>
+        <result property="picturedescription" column="picturedescription" jdbcType="VARCHAR"/>
+        <result property="picturename" column="picturename" jdbcType="VARCHAR"/>
+        <result property="picturetime" column="picturetime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TPictureMap">
+        select
+          id, pictureaddress, picturedescription, picturename, picturetime
+        from blog.t_picture
+        where id = #{id}
+    </select>
+
+    <!--查询单个-->
+    <select id="listPicture" resultMap="TPictureMap">
+        select
+          *
+        from blog.t_picture
+    </select>
+
+    <!--查询单个-->
+    <select id="getAllPictures" resultMap="TPictureMap">
+        select
+         *
+        from blog.t_picture
+    </select>
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TPictureMap">
+        select
+          id, pictureaddress, picturedescription, picturename, picturetime
+        from blog.t_picture
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TPictureMap">
+        select
+        id, pictureaddress, picturedescription, picturename, picturetime
+        from blog.t_picture
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="pictureaddress != null and pictureaddress != ''">
+                and pictureaddress = #{pictureaddress}
+            </if>
+            <if test="picturedescription != null and picturedescription != ''">
+                and picturedescription = #{picturedescription}
+            </if>
+            <if test="picturename != null and picturename != ''">
+                and picturename = #{picturename}
+            </if>
+            <if test="picturetime != null and picturetime != ''">
+                and picturetime = #{picturetime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into blog.t_picture(pictureaddress, picturedescription, picturename, picturetime)
+        values (#{pictureaddress}, #{picturedescription}, #{picturename}, #{picturetime})
+    </insert>
+
+    <!--添加图片-->
+    <insert id="savePictures" parameterType="com.nnxy.blog.entity.TPicture">
+        insert into blog.t_picture (picturename,picturetime,pictureaddress,picturedescription)
+        values (#{picturename},#{picturetime},#{pictureaddress},#{picturedescription})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update blog.t_picture
+        <set>
+            <if test="pictureaddress != null and pictureaddress != ''">
+                pictureaddress = #{pictureaddress},
+            </if>
+            <if test="picturedescription != null and picturedescription != ''">
+                picturedescription = #{picturedescription},
+            </if>
+            <if test="picturename != null and picturename != ''">
+                picturename = #{picturename},
+            </if>
+            <if test="picturetime != null and picturetime != ''">
+                picturetime = #{picturetime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--编辑修改相册-->
+    <update id="updatePicture" parameterType="com.nnxy.blog.entity.TPicture">
+        update blog.t_picture
+        set picturename = #{picturename}, picturetime = #{picturetime}, pictureaddress = #{pictureaddress}, picturedescription = #{picturedescription}
+        where id = #{id};
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from blog.t_picture where id = #{id}
+    </delete>
+
+</mapper>
