@@ -21,8 +21,13 @@ public class IndexController {
     @Autowired
     TBlogService tBlogService;
 
-    //分页查询博客列表
+
     @RequestMapping("/")
+    public String myindex(RedirectAttributes attributes){
+        return "redirect:/index";
+    }
+    //分页查询博客列表
+    @RequestMapping("/index")
     public String index(Model model, @RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, RedirectAttributes attributes){
         PageHelper.startPage(pageNum,10);
         List<FirstPageBlog> allFirstPageBlog = tBlogService.getAllFirstPageBlog();
@@ -59,8 +64,6 @@ public class IndexController {
     public String blog(@PathVariable Long id, Model model) {
         DetailedBlog detailedBlog = tBlogService.getDetailedBlog(id);
         model.addAttribute("blog", detailedBlog);
-
-
         return "blog";
     }
 
