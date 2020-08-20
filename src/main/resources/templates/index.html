@@ -4,7 +4,7 @@
 <head >
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONESTAR-首页</title>
+    <title>IKCROSS-首页</title>
 
     <link href="../static/images/me.jpg" th:href="@{/images/me.jpg}" rel="icon" type="image/x-ico">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
@@ -15,31 +15,31 @@
 <body>
 
 <!--导航-->
-<nav id="nav" class="gird-header" style="display: none">
+<nav class="gird-header">
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
-            <h2 class="ui olive header item" style="font-family: STSong">ikcross</h2>
+            <h2 class="ui olive header item" style="font-family: STSong">IKCROSS</h2>
             <!--<div class="right m-item item m-mobile-hide">-->
-            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide "><i class="home icon"></i>首页</a>
+            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide"><i class="home icon"></i>首页</a>
             <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"><i class="clone outline icon"></i>分类</a>
             <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"><i class="clock icon"></i>时间轴</a>
             <a href="#" th:href="@{/music}" class="m-item item m-mobile-hide"><i class="music icon"></i>音乐盒</a>
             <a href="#"  class="m-item item m-mobile-hide"><i class="book icon"></i>留言板</a>
-            <a href="#" th:href="@{/friends}" class="m-item item m-mobile-hide"><i class="pencil alternate icon"></i>友人帐</a>
-            <a href="#" th:href="@{/picture}" class="m-item item m-mobile-hide"><i class="image icon"></i>照片墙</a>
+            <a href="#" th:href="@{/friends}" class="active m-item item m-mobile-hide"><i class="pencil alternate icon"></i>友人帐</a>
+            <a href="#" th:href="@{/picture}" class="olive m-item item m-mobile-hide"><i class="image icon"></i>照片墙</a>
             <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide"><i class="info icon"></i>关于我</a>
             <!--</div>-->
-            <div class="right m-item item">
-                <form name="search" action="#" method="post" target="_blank">
+            <div class="right m-item item m-mobile-hide">
+                <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
                     <div class="ui icon transparent input m-margin-tb-tiny" style="color: white">
-                        <input style="color: white" type="text" name="query" placeholder="Search....">
+                        <input style="color: white" type="text" name="query" placeholder="Search...." th:value="${query}">
                         <i onclick="document.forms['search'].submit()" class="search link icon"></i>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-hide" style="display: none">
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
         <i class="sidebar icon"></i>
     </a>
 </nav>
@@ -54,14 +54,14 @@
         <div class="m-margin-top-maxx" align="center">
             <img class="ui circular image" align="center" src="../static/images/me.jpg" th:src="@{/images/me.jpg}" style="width: 150px;height: 150px;">
         </div>
-        <div class="m-font-size-title-large" align="center">ikcross</div>
+        <div class="m-font-size-title-large" align="center">IKCROSS</div>
 
         <div class="" align="center">
             <a href="#" class="ui tencent circular icon button"><i class="user icon"></i></a>
             <a href="#" class="ui wechat circular icon button"><i class="weixin icon"></i></a>
             <a href="#" class="ui qq circular icon button" data-content="1239921734" data-position="bottom center"><i class="qq icon"></i></a>
             <a href="https://github.com/" target="_blank" class="ui github circular icon button" data-content="点击跳转GitHub" data-position="bottom center"><i class="github icon"></i></a>
-            <a href="www.baidu.com" target="_blank" class="ui csdn circular icon button" data-content="点击跳转CSDN" data-position="bottom center"><i class="copyright outline icon"></i></a>
+            <a href="https://www.baidu.com/" target="_blank" class="ui csdn circular icon button" data-content="点击跳转CSDN" data-position="bottom center"><i class="copyright outline icon"></i></a>
             <a href="#" class="ui email circular icon button" data-content="1239921734@qq.com" data-position="bottom center"><i class="envelope  icon"></i></a>
         </div>
 
@@ -78,7 +78,7 @@
             <div align="center">QQ</div>
         </div>
 
-        <h3 class="m-font-size-text" align="center">欢迎来到我的博客，我是IKCROSS，喜欢西瓜的IKCROSS</h3>
+        <h3 class="m-font-size-text" align="center">欢迎来到我的客栈，我是一颗星，夜空中最亮的那颗</h3>
         <hr style="width: 30%">
         <h5 class="m-font-size-text-init-title m-margin-top-large">“描线一笔接一笔”</h5>
         <h5 class="m-font-size-text-init-title">“白色的素描本上渐渐萌生黑意”</h5>
@@ -99,6 +99,26 @@
 
 </div>
 
+
+
+<!--最新推荐-->
+<div class="ui m-padded-tb-large">
+    <div class="ui m-container-small m-opacity">
+        <div class="ui secondary segment " align="center">
+            <i class="bookmark icon"></i>最新推荐
+        </div>
+    </div>
+    <div class="ui stackable m-container-mini m-opacity grid">
+        <div class="m-margin-tb-tiny four wide column" th:each="blog : ${recommendedBlogs}">
+            <a href="#" class="class_outer" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                <img src="../static/images/backimg1.jpg"  th:src="@{${blog.firstPicture}}" alt="" class="ui rounded image">
+                <span class="class_cover" >
+                     <h4 class="m-font-size-blog-text m-margin-tb-tiny" th:text="${blog.title}">大圣，此去欲何?</h4>
+                  </span>
+            </a>
+        </div>
+    </div>
+</div>
 
 
 <!--中间内容-->
@@ -242,7 +262,7 @@
             </div>
         </div>
         <div class="ui inverted section divider"></div>
-          <a rel="nofollow" href="" target="_blank"></a>
+        <a rel="nofollow" href="" target="_blank"></a>
     </div>
     </div>
 

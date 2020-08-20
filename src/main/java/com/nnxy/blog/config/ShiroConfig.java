@@ -33,9 +33,10 @@ public class ShiroConfig {
         //指定SecuityManager
         bean.setSecurityManager(securityManager());
         //指定登录页面
-        bean.setLoginUrl("/admin_login");
+        bean.setLoginUrl("admin_login");
         //指定登录成功页面
-        bean.setSuccessUrl("testindex");
+        bean.setSuccessUrl("admin_index");
+
         bean.setUnauthorizedUrl("/unauthorizedUrl");
         //指定路径拦截规则，有序
         /**
@@ -46,7 +47,7 @@ public class ShiroConfig {
          * roles：角色认证
          */
         Map<String,String> map = new LinkedHashMap<>();
-
+        map.put("/login","anon");
         map.put("/tBlog/admin_blogs","authc");//必须登录
         map.put("/tType/admin_types","authc");//必须登录
         map.put("/tFriend/admin_friendsLinks","authc");//必须登录
@@ -55,6 +56,8 @@ public class ShiroConfig {
         map.put(" /tFriend/admin_friendsInputs","authc");//必须登录
         map.put("/tPicture/admin_picturesInputs","authc");//必须登录
         map.put("/tType/admin_typesInputs","authc");//必须登录
+
+        bean.setFilterChainDefinitionMap(map);
 
         return bean;
     }

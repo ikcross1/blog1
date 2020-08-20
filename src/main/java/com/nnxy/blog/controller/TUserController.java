@@ -57,20 +57,21 @@ public class TUserController {
         return this.tUserService.queryById(id);
     }
 
-    @RequestMapping("testindex")
-    public String testindex() {
-        return "admin_index";
-    }
-
 
     @RequestMapping("admin_login")
     public String admin_login() {
         return "admin_login";
     }
 
+
+    @RequestMapping("admin_index")
+    public String admin_index() {
+        return "admin_index";
+    }
+
     @RequestMapping("login")
     public String login(String username, String password,
-                        Map<String, Object> map, HttpSession session,
+                        Map<String, Object> map,
                         RedirectAttributes attributes) {
         UsernamePasswordToken token = new UsernamePasswordToken(username,password);
         try{
