@@ -2,6 +2,7 @@ package com.nnxy.blog.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.nnxy.blog.entity.TFriend;
 import com.nnxy.blog.entity.TType;
 import com.nnxy.blog.service.TTypeService;
 import org.springframework.stereotype.Controller;
@@ -95,21 +96,6 @@ public class TTypeController {
         return "redirect:/tType/admin_types";
     }
 
-    //编辑修改分类
-    @RequestMapping("updateTypes/{id}")
-    public String updateTypes(@PathVariable Long id, TType tType, RedirectAttributes attributes) {
-        Type type = tTypeService.getTypeByName(tType.getName());
-        if (type != null) {
-            System.out.println(1);
-            attributes.addFlashAttribute("message", "不能添加重复的分类");
-            return "redirect:/tType/admin_typesInputs";
-        }
-        int t = tTypeService.updateType(type);
-        if (t == 0) {
-            attributes.addFlashAttribute("message", "编辑失败");
-        } else {
-            attributes.addFlashAttribute("message", "编辑成功");
-        }
-        return "redirect:/tType/admin_types";
-    }
+
+
 }

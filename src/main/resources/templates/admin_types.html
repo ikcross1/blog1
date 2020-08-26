@@ -74,7 +74,6 @@
                 <td th:text="${type.id}">1</td>
                 <td th:text="${type.name}">我的故事</td>
                 <td>
-                    <a href="#" th:href="@{/tType/updateTypes/{id}(id=${type.id})}" class="ui mini teal basic button">编辑</a>
                     <a href="#" th:href="@{/tType/deleteTypes/{id}(id=${type.id})}" onclick="return confirm('确定要删除该分类吗？三思啊! 删了可就没了！')" class="ui mini red basic button">删除</a>
                 </td>
             </tr>
@@ -182,7 +181,7 @@
 <script>
 
     // $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
-
+    $('#blog-message').load(/*[[@{/footer/blogmessage}]]*/"/footer/blogmessage");
 
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');

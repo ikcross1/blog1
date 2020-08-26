@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head >
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,14 +19,14 @@
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui olive header item" style="font-family: STSong">IKCROSS</h2>
             <!--<div class="right m-item item m-mobile-hide">-->
-            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide"><i class="home icon"></i>首页</a>
+            <a href="#" th:href="@{/}" class="active m-item item m-mobile-hide"><i class="home icon"></i>首页</a>
             <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"><i class="clone outline icon"></i>分类</a>
             <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"><i class="clock icon"></i>时间轴</a>
             <a href="#" th:href="@{/music}" class="m-item item m-mobile-hide"><i class="music icon"></i>音乐盒</a>
             <a href="#"  class="m-item item m-mobile-hide"><i class="book icon"></i>留言板</a>
-            <a href="#" th:href="@{/friends}" class="active m-item item m-mobile-hide"><i class="pencil alternate icon"></i>友人帐</a>
+            <a href="#" th:href="@{/friends}" class="m-item item m-mobile-hide"><i class="pencil alternate icon"></i>友人帐</a>
             <a href="#" th:href="@{/picture}" class="olive m-item item m-mobile-hide"><i class="image icon"></i>照片墙</a>
-            <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide"><i class="info icon"></i>关于我</a>
+            <a href="/about" th:href="@{/about}"  class="m-item item m-mobile-hide"><i class="info icon"></i>关于我</a>
             <!--</div>-->
             <div class="right m-item item m-mobile-hide">
                 <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
@@ -78,7 +77,7 @@
             <div align="center">QQ</div>
         </div>
 
-        <h3 class="m-font-size-text" align="center">欢迎来到我的客栈，我是一颗星，夜空中最亮的那颗</h3>
+        <h3 class="m-font-size-text" align="center">我是IKCROSS，喜欢吃西瓜的IKCROSS</h3>
         <hr style="width: 30%">
         <h5 class="m-font-size-text-init-title m-margin-top-large">“描线一笔接一笔”</h5>
         <h5 class="m-font-size-text-init-title">“白色的素描本上渐渐萌生黑意”</h5>
@@ -273,7 +272,10 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 <script src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
-
+<!--看板娘加入-->
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"/>
+<script src="https://cdn.jsdelivr.net/gh/ikcross1/live2d-widget/autoload.js"></script>
 <script>
 
     // $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");

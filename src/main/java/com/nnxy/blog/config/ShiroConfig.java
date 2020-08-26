@@ -48,7 +48,7 @@ public class ShiroConfig {
          */
         Map<String,String> map = new LinkedHashMap<>();
         map.put("/login","anon");
-        map.put("/tBlog/admin_blogs","authc");//必须登录
+        map.put("/tBlog/admin_blogs","authc");//必须登4s5录
         map.put("/tType/admin_types","authc");//必须登录
         map.put("/tFriend/admin_friendsLinks","authc");//必须登录
         map.put("/tPicture/admin_pictures","authc");//必须登录
